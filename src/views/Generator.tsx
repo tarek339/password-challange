@@ -37,7 +37,7 @@ const Generator = () => {
       return;
     }
     if (+passwordLen > 30 || +passwordLen < 8) {
-      setErrorMessage("Mix length of 8 and max length of 30");
+      setErrorMessage("Min length of 8 and max length of 30");
       return;
     }
     if (!uppercase && !lowercase && !specialCharacters) {
