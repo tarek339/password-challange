@@ -1,11 +1,12 @@
 import { Box } from "@chakra-ui/react";
 import Title from "../components/Title";
 import Input from "../components/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CheckBox from "../components/CheckBox";
 import Button from "../components/Button";
 import { generatePassword } from "../lib/generatePassword";
-import { CopyIcon, CheckIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import Result from "./Result";
+import { copyToClipboard } from "../lib/copyToClipboard";
 
 const Generator = () => {
   const [passwordLen, setPasswordLen] = useState("8");
@@ -54,23 +55,13 @@ const Generator = () => {
     setGeneratedPassword(result);
   };
 
-  const showPassword = () => {
-    setShow(!show);
-  };
-
-  const copyToClipboard = () => {
-    let password = generatedPassword;
-    let input = document.createElement("input");
-    input.value = password;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand("copy");
-    document.body.removeChild(input);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 1500);
-  };
+  useEffect(() => {
+    if (copied) {
+      setTimeout(() => {
+        setCopied(false);
+      }, 1500);
+    }
+  }, [copied]);
 
   return (
     <Box display="flex" flexDirection="column" gap={4}>
@@ -106,27 +97,20 @@ const Generator = () => {
           <Button type="submit" title={"GENERATE"} />
         </Box>
       </form>
+
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Title title={"Your password"} as={"h3"} fontSize={"xx-large"} />
       </Box>
-
       {generatedPassword && (
-        <Input
-          readOnly
-          type={show ? "text" : "password"}
-          label={"Password"}
-          value={generatedPassword}
-          onChange={undefined}
-          rightElement={
-            <>
-              <Box onClick={copyToClipboard} cursor="pointer" pr={2}>
-                {copied ? <CheckIcon /> : <CopyIcon />}
-              </Box>
-              <Box onClick={showPassword} cursor="pointer" pr={2}>
-                {!show ? <ViewIcon /> : <ViewOffIcon />}
-              </Box>
-            </>
-          }
+        <Result
+          show={show}
+          generatedPassword={generatedPassword}
+          copyToClipboard={() => {
+            copyToClipboard(generatedPassword);
+            setCopied(true);
+          }}
+          showPassword={() => setShow(!show)}
+          copied={copied}
         />
       )}
     </Box>
