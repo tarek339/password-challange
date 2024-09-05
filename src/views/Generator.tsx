@@ -25,6 +25,7 @@ const Generator = () => {
     setErrorMessage("");
     setOptionMessage("");
     setGeneratedPassword("");
+    setShow(false);
 
     if (!passwordLen) {
       setErrorMessage("Field is required");
