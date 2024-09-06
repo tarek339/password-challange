@@ -70,7 +70,7 @@ const Generator = () => {
         <Box display="flex" flexDirection="column" gap={4}>
           <Input
             type={"number"}
-            label={"Password length (default 8, max 20)"}
+            label={"Password length (default 8, max 30)"}
             value={passwordLen}
             onChange={(e) => setPasswordLen(e.target.value)}
             message={errorMessage}
